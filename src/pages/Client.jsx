@@ -12,7 +12,7 @@ function Client() {
         if(!token) {
             navigate('/login')
         }
-    }, [])
+    }, [navigate])
     useEffect(() => {
         async function getCategory() {
             try {
