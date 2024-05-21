@@ -1,29 +1,19 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { backendUrl } from '../Url/backendUrl';
+import { useGetData } from '../hook/getHook';
 
 
 function Client() {
     const navigate = useNavigate();
-    const [ cart, setCart ] = useState([]);
+    const cart = useGetData('categories');
     useEffect(() => {
         const token = localStorage.getItem('token');
         if(!token) {
             navigate('/login')
         }
     }, [navigate])
-    useEffect(() => {
-        async function getCategory() {
-            try {
-                const response = await axios.get(`${backendUrl}/categories`);
-                setCart(response.data);
-            }catch(eer) {
-                console.log('Xatolik yuz berdi', eer);
-            }
-        }
-        getCategory()
-    }, [])
     const handleDelete = async (id) => {
         try {
             const token = localStorage.getItem('token');
@@ -43,7 +33,7 @@ function Client() {
     return (
     <div className='grid grid-cols-3 justify-evenly'>
         {
-            cart.map(el => 
+            cart && cart.map(el => 
                 <div className='w-[230px] text-center shadow-lg p-4 hover:shadow-xl'>
                     <img src={el.image} alt="" />
                     <h2>{el.name}</h2>
